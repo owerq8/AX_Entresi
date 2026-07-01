@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petbbi 릴리즈 게이트 — PM 대시보드</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif; background: #f4f5f7; color: #1a1a2e; line-height: 1.5; }
+.container { max-width: 1000px; margin: 0 auto; padding: 32px 22px 48px; }
+
+/* header */
+.header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.header h1 { font-size: 19px; font-weight: 800; letter-spacing: -.3px; }
+.header .sub { font-size: 12px; color: #6c757d; margin-top: 3px; }
+.level-badge { background: #e63946; color: #fff; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; }
+
+/* verdict */
+.verdict { background: #fff; border: 1.5px solid #ffd0d4; border-left: 6px solid #e63946; border-radius: 12px; padding: 20px 26px; margin-bottom: 18px; display: flex; align-items: center; gap: 22px; flex-wrap: wrap; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.verdict-flag { font-size: 34px; }
+.verdict-body { flex: 1; min-width: 240px; }
+.verdict-status { font-size: 18px; font-weight: 900; color: #c9323e; }
+.verdict-desc { font-size: 12.5px; color: #666; margin-top: 3px; }
+.verdict-nums { display: flex; gap: 8px; }
+.vn { border-radius: 9px; padding: 10px 15px; text-align: center; min-width: 62px; }
+.vn .vn-n { font-size: 23px; font-weight: 900; line-height: 1; }
+.vn .vn-l { font-size: 10.5px; margin-top: 4px; font-weight: 600; }
+.vn-p0 { background: #ffe0e3; color: #c9323e; } .vn-p1 { background: #fff3cd; color: #856404; } .vn-p2 { background: #e9ecef; color: #555; }
+
+/* section */
+.section { background: #fff; border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.section-title { font-size: 14px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+
+/* gate */
+.gate-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.gate-card { border-radius: 10px; padding: 16px 14px; border: 1.5px solid; text-align: center; position: relative; }
+.gate-card .g-label { font-size: 12px; font-weight: 800; }
+.gate-card .g-rule { font-size: 19px; font-weight: 900; margin: 7px 0 6px; font-family: monospace; }
+.gate-card .g-desc { font-size: 11.5px; color: #666; line-height: 1.45; }
+.gate-block { background: #fff5f5; border-color: #ffd0d4; } .gate-block .g-rule, .gate-block .g-label { color: #c9323e; }
+.gate-warn { background: #fffbf0; border-color: #ffe9b8; } .gate-warn .g-rule, .gate-warn .g-label { color: #b5560a; }
+.gate-pass { background: #f0faf5; border-color: #c4e8d6; } .gate-pass .g-rule, .gate-pass .g-label { color: #1f7a4d; }
+.gate-here { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #e63946; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+
+/* plan table */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12.8px; }
+thead th { background: #f8f9fa; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: #6c757d; padding: 9px 11px; text-align: left; border-bottom: 2px solid #e9ecef; white-space: nowrap; }
+thead th.center { text-align: center; }
+tbody td { padding: 11px 11px; border-bottom: 1px solid #f0f2f5; vertical-align: middle; }
+tbody td.center { text-align: center; }
+tbody tr:last-child td { border-bottom: none; }
+.mono { font-family: monospace; font-size: 12px; color: #444; }
+.badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 5px; white-space: nowrap; }
+.b-p0 { background: #ffe0e3; color: #c9323e; } .b-p1 { background: #fff3cd; color: #856404; }
+.step { display: inline-block; font-size: 10px; font-weight: 800; color: #fff; background: #888; border-radius: 4px; padding: 2px 6px; margin-right: 6px; }
+.step.s1 { background: #e63946; } .step.s2 { background: #b5560a; }
+.cell-title { font-weight: 700; }
+.cell-note { font-size: 11.5px; color: #777; margin-top: 2px; }
+
+/* bottom summary */
+.summary { background: #1a1a2e; border-radius: 12px; padding: 22px 26px; color: #e8e8f0; }
+.summary-title { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 16px; }
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.sum-col h3 { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 11px; }
+.formula { display: flex; gap: 7px; margin-bottom: 10px; }
+.fx { background: #26263c; border-radius: 7px; padding: 9px 6px; flex: 1; text-align: center; border-top: 3px solid; }
+.fx .fx-w { font-size: 18px; font-weight: 900; } .fx .fx-n { font-size: 10.5px; color: #c8c8dc; margin-top: 2px; }
+.fx-red { border-color: #e63946; } .fx-red .fx-w { color: #ff6b78; }
+.fx-orange { border-color: #e76f51; } .fx-orange .fx-w { color: #ff9877; }
+.fx-blue { border-color: #4361ee; } .fx-blue .fx-w { color: #7c93ff; }
+.thr { display: flex; gap: 7px; }
+.thr-item { flex: 1; text-align: center; border-radius: 6px; padding: 7px 4px; font-size: 11px; font-weight: 700; }
+.thr-item span { display: block; font-size: 14px; font-weight: 900; margin-top: 2px; }
+.thr-p0 { background: #3a1f24; color: #ff8892; } .thr-p1 { background: #3a331f; color: #ffd471; } .thr-p2 { background: #2a2a3e; color: #b8b8cc; }
+.gsum { display: flex; flex-direction: column; gap: 7px; }
+.gsum-row { display: flex; align-items: center; gap: 10px; background: #26263c; border-radius: 7px; padding: 9px 12px; border-left: 4px solid; }
+.gsum-row.r { border-color: #e63946; } .gsum-row.w { border-color: #e0a020; } .gsum-row.p { border-color: #2d9d63; }
+.gsum-rule { font-family: monospace; font-size: 12.5px; font-weight: 800; color: #fff; min-width: 96px; }
+.gsum-desc { font-size: 11px; color: #c8c8dc; }
+.promo-mini { font-size: 11px; color: #9a9ab0; line-height: 1.6; margin-top: 10px; }
+.promo-mini b { color: #ff8892; }
+
+@media(max-width:720px) {
+  .gate-row, .summary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div>
+    <h1>🚦 Petbbi 릴리즈 게이트 — 출시 판단</h1>
+    <div class="sub">기준: product_spec_petbbi_v1.md · 53건 · 김규리 2026-07-01</div>
+  </div>
+  <span class="level-badge">🔴 Challenge</span>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <div class="verdict-flag">🔴</div>
+  <div class="verdict-body">
+    <div class="verdict-status">출시 보류 (Block)</div>
+    <div class="verdict-desc">미해결 <b>P0 12건</b> → 전량 PASS 전까지 출시 불가. 게이트가 정상 작동 중.</div>
+  </div>
+  <div class="verdict-nums">
+    <div class="vn vn-p0"><div class="vn-n">12</div><div class="vn-l">P0</div></div>
+    <div class="vn vn-p1"><div class="vn-n">26</div><div class="vn-l">P1</div></div>
+    <div class="vn vn-p2"><div class="vn-n">15</div><div class="vn-l">P2</div></div>
+  </div>
+</div>
+
+<!-- GATE -->
+<div class="section">
+  <div class="section-title">릴리즈 게이트 기준</div>
+  <div class="gate-row">
+    <div class="gate-card gate-block">
+      <div class="gate-here">◀ 현재</div>
+      <div class="g-label">🔴 출시 보류</div>
+      <div class="g-rule">P0 &gt; 0</div>
+      <div class="g-desc">미해결 P0 1건이라도 있으면 불가</div>
+    </div>
+    <div class="gate-card gate-warn">
+      <div class="g-label">🟡 조건부 출시</div>
+      <div class="g-rule">P0=0 · P1≤2</div>
+      <div class="g-desc">PM 승인 하 출시, 잔여 P1 핫픽스 등록</div>
+    </div>
+    <div class="gate-card gate-pass">
+      <div class="g-label">🟢 출시 가능</div>
+      <div class="g-rule">P0=0 · P1=0</div>
+      <div class="g-desc">P2는 백로그 이관</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXECUTION PLAN -->
+<div class="section">
+  <div class="section-title">테스트 실행 우선순위 — 출시 가부를 가장 빨리 확정하는 순서</div>
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr><th>순서</th><th class="center">Gate</th><th>대상 · 핵심 케이스</th><th>실행 시점</th><th>판정</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="step s1">1</span></td>
+        <td class="center"><span class="badge b-p0">P0</span></td>
+        <td>
+          <div class="cell-title">AI 생성·계정·데이터 안전 경로 (12건 전량)</div>
+          <div class="cell-note mono">TC-015 생성중끊김 · 016 무한로딩 · 043 만14세규제 · 047·049 계정 정합성</div>
+        </td>
+        <td>Day 1 오전</td>
+        <td><b>1건 실패 = 보류</b></td>
+      </tr>
+      <tr>
+        <td><span class="step s2">2</span></td>
+        <td class="center"><span class="badge b-p1">P1</span></td>
+        <td>
+          <div class="cell-title">이탈·글로벌 회귀 (P0 PASS 후)</div>
+          <div class="cell-note mono">TC-014 한도안내 · 025 다국어폴백 · 019 다묘단위 · 040 푸시권한</div>
+        </td>
+        <td>Day 1 오후</td>
+        <td>미해결 ≤2 = 조건부</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- BOTTOM SUMMARY -->
+<div class="summary">
+  <div class="summary-title">📌 우선순위 점수화 &amp; 게이트 기준 요약</div>
+  <div class="summary-grid">
+    <div class="sum-col">
+      <h3>① 우선순위 점수화</h3>
+      <div class="formula">
+        <div class="fx fx-red"><div class="fx-w">50</div><div class="fx-n">F1 서비스중단</div></div>
+        <div class="fx fx-orange"><div class="fx-w">30</div><div class="fx-n">F2 영향범위</div></div>
+        <div class="fx fx-blue"><div class="fx-w">20</div><div class="fx-n">F3 가역성</div></div>
+      </div>
+      <div class="thr">
+        <div class="thr-item thr-p0">≥80<span>P0</span></div>
+        <div class="thr-item thr-p1">50~79<span>P1</span></div>
+        <div class="thr-item thr-p2">&lt;50<span>P2</span></div>
+      </div>
+      <div class="promo-mini">
+        <b>즉시 승격(점수 무관 P0):</b> AI 무한로딩 · 결제 이중청구 · 데이터 손실 · 계정 정합성 · 만14세 규제 · 펫추모 자동콘텐츠. → v1 53/53 재현.
+      </div>
+    </div>
+    <div class="sum-col">
+      <h3>② 릴리즈 게이트</h3>
+      <div class="gsum">
+        <div class="gsum-row r"><span>🔴</span><span class="gsum-rule">P0 &gt; 0</span><span class="gsum-desc">보류 — <b>현재(P0 12)</b></span></div>
+        <div class="gsum-row w"><span>🟡</span><span class="gsum-rule">P0=0·P1≤2</span><span class="gsum-desc">조건부 출시</span></div>
+        <div class="gsum-row p"><span>🟢</span><span class="gsum-rule">P0=0·P1=0</span><span class="gsum-desc">출시 가능</span></div>
+      </div>
+      <div class="promo-mini">
+        점수가 케이스별 P0/P1/P2 부여 → <b>미해결 건수</b>를 게이트에 대입해 go/no-go 자동 판정. 상한 P1≤2는 속도·품질 절충값.
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
