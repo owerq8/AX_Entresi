@@ -159,7 +159,7 @@ streamlit run streamlit_app.py     # http://localhost:8501
 ├── context/                       # 기업 컨텍스트 (회사·업계)
 ├── decisions.md                   # 의사결정 로그 (20+ 결정 기록)
 ├── DEPLOY.md                      # Streamlit 배포 가이드
-└── hackathon_summary.md           # 작업 전체 요약
+└── output/hackathon_summary.md    # 작업 전체 요약
 ```
 
 ## 웹 대시보드 (4탭)
@@ -186,6 +186,6 @@ streamlit run streamlit_app.py     # http://localhost:8501
 ## 참고 문서
 
 - [CLAUDE.md](CLAUDE.md) — 과제 정의 · 채점 기준
-- [hackathon_summary.md](hackathon_summary.md) — 작업 전체 요약 · 발표 스토리라인
+- [output/hackathon_summary.md](output/hackathon_summary.md) — 작업 전체 요약 · 발표 스토리라인
 - [decisions.md](decisions.md) — 의사결정 로그
 - [DEPLOY.md](DEPLOY.md) — 대시보드 배포 가이드
