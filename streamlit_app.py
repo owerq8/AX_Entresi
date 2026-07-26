@@ -584,7 +584,6 @@ with tab_gate:
             help="릴리즈마다 리스크 허용치가 다를 수 있어 PM이 직접 조정합니다. "
                  "예: 결제·계정처럼 민감한 출시는 낮게, 커뮤니티 UI 개선은 높게.",
         )
-        kpi_slot = st.container()
         verdict_slot = st.container()
 
         blockers = df[df["우선순위"].isin(["P0", "P1"])].copy()
@@ -622,11 +621,6 @@ with tab_gate:
                 "P0=0 AND P1=0 — 정상 출시. P2는 백로그 이관.",
             )
 
-        with kpi_slot:
-            g1, g2, g3 = st.columns(3)
-            g1.markdown(stat_tile("미해결 P0", f"{unresolved_p0}건", "", "stat-c-red"), unsafe_allow_html=True)
-            g2.markdown(stat_tile("미해결 P1", f"{unresolved_p1}건", "", "stat-c-blue"), unsafe_allow_html=True)
-            g3.markdown(stat_tile("게이트 상한(P1)", f"≤ {p1_threshold}건", "", "stat-c-gray"), unsafe_allow_html=True)
         with verdict_slot:
             st.markdown(
                 verdict_card(flag, status, note, border_color, unresolved_p0, unresolved_p1),
