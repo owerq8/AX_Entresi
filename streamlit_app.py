@@ -613,7 +613,7 @@ with tab_gate:
         if unresolved_p0 > 0:
             flag, status, border_color, note = (
                 "🔴", "출시 보류 (Block)", "#e63946",
-                "1건이라도 있으면 출시 불가. 핫픽스 후 재검증 필요.",
+                "1건이라도 있으면 출시 불가. 긴급 수정 후 재검증 필요.",
             )
         elif unresolved_p1 > p1_threshold:
             flag, status, border_color, note = (
