@@ -613,17 +613,17 @@ with tab_gate:
         if unresolved_p0 > 0:
             flag, status, border_color, note = (
                 "🔴", "출시 보류 (Block)", "#e63946",
-                f"미해결 P0 {unresolved_p0}건 — 1건이라도 있으면 출시 불가. 핫픽스 후 재검증 필요.",
+                "1건이라도 있으면 출시 불가. 핫픽스 후 재검증 필요.",
             )
         elif unresolved_p1 > p1_threshold:
             flag, status, border_color, note = (
                 "🟠", "스프린트 연장 권장", "#e76f51",
-                f"P0=0 이지만 미해결 P1 {unresolved_p1}건 > 상한 {p1_threshold} → 스프린트 연장 권장.",
+                f"P0=0이지만 P1이 상한({p1_threshold}건)을 초과 → 스프린트 연장 권장.",
             )
         elif unresolved_p1 > 0:
             flag, status, border_color, note = (
                 "🟡", "조건부 출시 (Warn)", "#f4a261",
-                f"P0=0, 미해결 P1 {unresolved_p1}건(≤{p1_threshold}) — PM 승인 하 출시 + 차기 스프린트 핫픽스 등록.",
+                f"P0=0, P1이 상한({p1_threshold}건) 이내 — PM 승인 하 출시 + 차기 스프린트 핫픽스 등록.",
             )
         else:
             flag, status, border_color, note = (
