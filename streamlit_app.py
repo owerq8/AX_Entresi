@@ -253,8 +253,8 @@ def plotly_bar(df: pd.DataFrame, x: str, y: str, *, color: str | None = None,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, title=None),
         height=280,
     )
-    value_axis = dict(showgrid=True, gridcolor="#e9ecef", zeroline=False, title=None)
-    # automargin=True — 카테고리 라벨(P0/P1/P2 등)이 좁은 고정 margin에 잘리지 않도록 함
+    # automargin=True — 두 축 모두 좁은 고정 margin(8px)에 라벨이 잘리거나 겹치지 않도록 함
+    value_axis = dict(showgrid=True, gridcolor="#e9ecef", zeroline=False, title=None, automargin=True)
     cat_axis = dict(showgrid=False, title=None, automargin=True)
     if orientation == "h":
         fig.update_xaxes(**value_axis)
