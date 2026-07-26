@@ -494,7 +494,7 @@ with tab_cov:
         f"엣지 {_edges_all['엣지세부유형'].nunique() if len(_edges_all) else 0}유형 {len(_edges_all)}건"
     )
     if _missing_sections:
-        st.warning(f"기획서엔 있는데 케이스가 하나도 없는 섹션: {', '.join(_missing_sections)}")
+        st.warning(f"기획서엔 있는데 케이스가 한 건도 없는 섹션: {', '.join(_missing_sections)}")
 
     box = section("기능 섹션 x 테스트 유형 매트릭스", key="matrix",
                    caption="섹션별로 Happy/Unhappy 누락 여부와 P0 포함 여부를 확인합니다.")
@@ -578,7 +578,7 @@ with tab_cov:
     with box:
         n_global = int(df["글로벌관련"].sum())
         if not n_global:
-            st.warning("다국어 동시 출시가 목표인데, 다국어/글로벌 관련 케이스가 하나도 없습니다.")
+            st.warning("다국어 동시 출시가 목표인데, 다국어/글로벌 관련 케이스가 한 건도 없습니다.")
         st.caption(f"다국어/글로벌 관련 케이스 {n_global}건 / 전체 {n_total}건 ({n_global / n_total:.0%})")
 
 # ────────────────────────────────────────────────────────────
