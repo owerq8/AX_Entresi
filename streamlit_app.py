@@ -492,16 +492,20 @@ with tab_cov:
                               color="우선순위", color_discrete_map=CHART_COLOR)
             st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
         with c2:
-            st.caption("테스트유형 분포 (출처별)")
+            st.caption("테스트 유형 분포 (출처별)")
             by_src = df.pivot_table(index="테스트유형", columns="출처",
                                     values="테스트케이스ID", aggfunc="count", fill_value=0)
             for t in TYPE_ORDER:
                 if t not in by_src.index:
                     by_src.loc[t] = 0
             by_src_long = by_src.reset_index().melt(id_vars="테스트유형", var_name="출처", value_name="건수")
+            SOURCE_DISPLAY = {"기획서기반": "기획서 기반", "AI추가": "AI 추가"}
+            by_src_long["출처"] = by_src_long["출처"].map(SOURCE_DISPLAY)
             fig = plotly_bar(by_src_long, x="테스트유형", y="건수", color="출처",
-                              category_orders={"테스트유형": TYPE_ORDER, "출처": SOURCE_ORDER},
-                              color_discrete_map=CHART_COLOR, barmode="stack")
+                              category_orders={"테스트유형": TYPE_ORDER,
+                                                "출처": [SOURCE_DISPLAY[s] for s in SOURCE_ORDER]},
+                              color_discrete_map={SOURCE_DISPLAY[k]: v[1] for k, v in SOURCE_BADGE.items()},
+                              barmode="stack")
             st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
 
     box = section("엣지 세부유형 분포 — 실패 클래스 공백 감시", key="edge-dist")
