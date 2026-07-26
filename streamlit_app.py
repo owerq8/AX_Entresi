@@ -756,9 +756,9 @@ with tab_repro:
                 "Unhappy": (d["테스트유형"] == "Unhappy Path").sum(),
                 "Edge": (d["테스트유형"] == "Edge Case").sum(),
                 "P0": (d["우선순위"] == "P0").sum(),
-                "AI추가": (d["출처"] == "AI추가").sum(),
-                "엣지유형수": edge_kinds,
-                "섹션수": d["기능섹션"].nunique(),
+                "AI 추가": (d["출처"] == "AI추가").sum(),
+                "엣지 유형 수": edge_kinds,
+                "섹션 수": d["기능섹션"].nunique(),
             })
 
         if not rows:
