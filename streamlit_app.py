@@ -451,6 +451,14 @@ with tab_list:
 # 📊 커버리지 리포트
 # ────────────────────────────────────────────────────────────
 with tab_cov:
+    _edges_all = df[df["테스트유형"] == "Edge Case"]
+    _uncovered_sections = int((df.groupby("기능섹션").size() == 0).sum())
+    st.info(
+        f"**릴리즈 준비도 한 줄**  ·  P0 {n_p0}건  ·  "
+        f"미커버 섹션 {_uncovered_sections}개  ·  "
+        f"엣지 {_edges_all['엣지세부유형'].nunique() if len(_edges_all) else 0}유형 {len(_edges_all)}건"
+    )
+
     box = section("기능 섹션 x 테스트 유형 매트릭스", key="matrix",
                    caption="섹션별로 Happy/Unhappy 누락 여부와 P0 포함 여부를 확인합니다.")
     with box:
@@ -524,15 +532,9 @@ with tab_cov:
             if missing_kinds:
                 st.warning(f"엣지 유형 공백: {', '.join(sorted(missing_kinds))} — 해당 실패 클래스 미커버")
             else:
-                st.success("엣지 6유형(권한·네트워크·빈상태·AI폴백·상태정합성·경계값) 모두 커버됨")
+                st.success("엣지 6유형 모두 커버됨 (6/6)")
         else:
             st.info("Edge Case가 없습니다.")
-
-        st.info(
-            f"**릴리즈 준비도 한 줄**  ·  P0 {n_p0}건  ·  "
-            f"미커버 섹션 {int((matrix['소계'] == 0).sum())}개  ·  "
-            f"엣지 {edges['엣지세부유형'].nunique() if len(edges) else 0}유형 {len(edges)}건"
-        )
 
     box = section("글로벌/다국어 커버리지 — 해외 동시 출시 관점 공백 감시", key="i18n-dist",
                    caption="Petbbi 핵심 미션(다국어 동시 출시) 관점에서 언어·해외 관련 케이스가 섹션별로 있는지 확인합니다. "
