@@ -89,14 +89,16 @@ st.markdown(
         border-bottom: 1px solid #eee;
       }}
 
-      /* KPI 스탯 타일 */
+      /* KPI 스탯 타일 — pct 줄 유무와 무관하게 4장 높이를 고정해 정렬 맞춤 */
       .stat-tile {{
         background: #fff; border-radius: 10px; padding: 20px; text-align: center;
         box-shadow: 0 1px 4px rgba(0,0,0,.06); border-top: 4px solid currentColor;
+        min-height: 138px; box-sizing: border-box;
+        display: flex; flex-direction: column; justify-content: center;
       }}
       .stat-n {{ font-size: 40px; font-weight: 800; line-height: 1.1; }}
       .stat-label {{ font-size: 13px; color: #666; margin-top: 2px; }}
-      .stat-pct {{ font-size: 13px; font-weight: 600; margin-top: 6px; min-height: 1em; }}
+      .stat-pct {{ font-size: 13px; font-weight: 600; margin-top: 6px; min-height: 18px; }}
       .stat-c-red {{ color: {SEMANTIC['critical']}; }}
       .stat-c-purple {{ color: #6c5ce7; }}
       .stat-c-blue {{ color: #4361ee; }}
