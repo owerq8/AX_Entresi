@@ -608,7 +608,11 @@ with tab_gate:
             use_container_width=True,
             hide_index=True,
             disabled=["테스트케이스ID", "기능섹션", "테스트케이스제목", "우선순위"],
-            column_config={"미해결(실패)": st.column_config.CheckboxColumn(help="체크 = 테스트 실패(미해결)")},
+            column_config={
+                "기능섹션": st.column_config.Column(label="기능 섹션"),
+                "테스트케이스제목": st.column_config.Column(label="테스트 케이스 제목"),
+                "미해결(실패)": st.column_config.CheckboxColumn(help="체크 = 테스트 실패(미해결)"),
+            },
             key="gate_editor",
         )
 
@@ -669,7 +673,7 @@ with tab_gate:
             st.caption(
                 "**도메인 즉시승격(점수 무관 P0)**: ①AI 생성 중 크래시·무한로딩 ②결제 이중청구·혜택 미반영 "
                 "③추억 데이터 손실 ④계정 삭제 정합성 파괴 ⑤만14세 미만 미차단(규제) "
-                "⑥사별·장기 비활동 반려동물 자동 콘텐츠 지속 생성(펫추모 정서신뢰)"
+                "⑥사별·장기 비활동 반려동물 자동 콘텐츠 지속 생성"
             )
 
 # ────────────────────────────────────────────────────────────
