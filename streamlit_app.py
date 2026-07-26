@@ -452,7 +452,7 @@ with tab_list:
 # ────────────────────────────────────────────────────────────
 with tab_cov:
     box = section("섹션 × 테스트유형 매트릭스", key="matrix",
-                   caption="출시 직전 PM의 두 질문 — ① 빈 섹션이 있나 ② 그 섹션에 블로커(P0)가 잡혔나 를 확인합니다.")
+                   caption="출시 직전 PM의 두 질문 — ① Happy/Unhappy 중 누락된 유형이 있는지 ② 그 섹션에 블로커(P0)가 포함되어 있는지 확인합니다.")
     with box:
         matrix = (
             df.pivot_table(index="기능섹션", columns="테스트유형",
