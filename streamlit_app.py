@@ -136,6 +136,13 @@ SPECS = {
     "v3 · 건강기록 (CRUD)": "output/standard/qa-checklist-petbbi-v3-health.csv",
     "v4 · 예약·일정": "output/standard/qa-checklist-petbbi_v4_booking.csv",
 }
+# 기획서 원문(.md) — H2 섹션 목록을 뽑아 "케이스가 0건이라 표에 아예 안 잡히는 섹션"까지 감지하는 데 사용
+SPEC_MD = {
+    "v1 · AI 캐릭터·소셜 (기본 · 53건)": "data/product_spec_petbbi_v1.md",
+    "v2 · 구독·결제": "data/product_spec_petbbi_v2_subscription.md",
+    "v3 · 건강기록 (CRUD)": "data/product_spec_petbbi_v3_health.md",
+    "v4 · 예약·일정": "data/product_spec_petbbi_v4_booking.md",
+}
 COLUMNS = ["기능섹션", "테스트케이스ID", "테스트케이스제목", "테스트유형",
            "사전조건", "테스트절차", "기대결과", "우선순위", "출처"]
 
@@ -148,6 +155,12 @@ def load_csv(path: str) -> pd.DataFrame:
     for c in df.columns:
         df[c] = df[c].str.replace(r"\s+", " ", regex=True).str.strip()
     return df
+
+
+def parse_h2_sections(md_text: str) -> list[str]:
+    """기획서 원문에서 H2("## ") 제목을 순서대로 뽑는다 — 케이스 0건이라 표에 행 자체가
+    안 생기는 섹션까지 잡기 위해, CSV가 아니라 기획서 원문을 기준(ground truth)으로 삼는다."""
+    return [line.removeprefix("## ").strip() for line in md_text.splitlines() if line.startswith("## ")]
 
 
 def edge_subtype(row: pd.Series) -> str:
@@ -356,6 +369,16 @@ if df is None:
     df = load_csv(SPECS[choice])
     source_label = choice
 
+spec_md_text = ""
+if source_label and source_label.startswith("AI 생성") and uploaded_spec is not None:
+    spec_md_text = uploaded_spec.getvalue().decode("utf-8", errors="ignore")
+elif choice in SPEC_MD:
+    try:
+        spec_md_text = (ROOT / SPEC_MD[choice]).read_text(encoding="utf-8")
+    except OSError:
+        spec_md_text = ""
+expected_sections = parse_h2_sections(spec_md_text)
+
 missing = [c for c in COLUMNS if c not in df.columns]
 if missing:
     st.error(f"CSV에 필수 컬럼이 없습니다: {missing}\n\n필요 컬럼: {COLUMNS}")
@@ -452,12 +475,15 @@ with tab_list:
 # ────────────────────────────────────────────────────────────
 with tab_cov:
     _edges_all = df[df["테스트유형"] == "Edge Case"]
-    _uncovered_sections = int((df.groupby("기능섹션").size() == 0).sum())
+    # 기획서 원문(H2)을 기준으로 비교 — CSV만 보면 케이스 0건인 섹션은 표에 행 자체가 안 생겨 못 잡는다
+    _missing_sections = [s for s in expected_sections if s not in set(df["기능섹션"])]
     st.info(
         f"**릴리즈 준비도 한 줄**  ·  P0 {n_p0}건  ·  "
-        f"미커버 섹션 {_uncovered_sections}개  ·  "
+        f"미커버 섹션 {len(_missing_sections)}개  ·  "
         f"엣지 {_edges_all['엣지세부유형'].nunique() if len(_edges_all) else 0}유형 {len(_edges_all)}건"
     )
+    if _missing_sections:
+        st.warning(f"기획서엔 있는데 케이스가 하나도 없는 섹션: {', '.join(_missing_sections)}")
 
     box = section("기능 섹션 x 테스트 유형 매트릭스", key="matrix",
                    caption="섹션별로 Happy/Unhappy 누락 여부와 P0 포함 여부를 확인합니다.")
