@@ -469,7 +469,10 @@ with tab_list:
                 use_container_width=True,
                 hide_index=True,
                 column_config={
-                    "테스트케이스제목": st.column_config.TextColumn(width="medium"),
+                    "기능섹션": st.column_config.Column(label="기능 섹션"),
+                    "테스트케이스제목": st.column_config.TextColumn(label="테스트 케이스 제목", width="medium"),
+                    "테스트유형": st.column_config.Column(label="테스트 유형"),
+                    "사전조건": st.column_config.Column(label="사전 조건"),
                     "테스트절차": st.column_config.TextColumn(width="large"),
                     "기대결과": st.column_config.TextColumn(width="large"),
                 },
