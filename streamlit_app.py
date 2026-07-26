@@ -123,6 +123,19 @@ st.markdown(
       .empty-state {{ text-align: center; padding: 48px 24px; color: #6c757d; }}
       .empty-state .icon {{ font-size: 32px; margin-bottom: 8px; }}
 
+      /* 테스트 실행 플랜 — 2단계 가로 타임라인 */
+      .exec-flow {{ display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }}
+      .exec-step {{
+        flex: 1; min-width: 220px; background: #fff; border: 1px solid #eee;
+        border-radius: 12px; padding: 16px 18px;
+      }}
+      .exec-step-head {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }}
+      .exec-step-badge {{ font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; }}
+      .exec-step-time {{ font-size: 12px; color: #888; font-weight: 600; }}
+      .exec-step-title {{ font-size: 14px; font-weight: 800; margin-bottom: 4px; }}
+      .exec-step-desc {{ font-size: 12.5px; color: #555; line-height: 1.5; }}
+      .exec-arrow {{ display: flex; align-items: center; justify-content: center; font-size: 20px; color: #ccc; }}
+
       /* 툴팁 — 기본 흰 배경/검정 글자 대신 사이드바와 통일된 다크 톤 + 브랜드 포인트 */
       div[data-baseweb="tooltip"] {{
         background-color: #2b2b2b !important;
@@ -308,6 +321,20 @@ def verdict_card(flag: str, status: str, desc: str, border_color: str,
         f"<div class='verdict-desc'>{desc}</div>"
         f"</div>"
         f"<div class='verdict-nums'>{chips}</div>"
+        f"</div>"
+    )
+
+
+def exec_step(badge_label: str, badge_colors: tuple[str, str], time_label: str, title: str, desc: str) -> str:
+    bg, fg = badge_colors
+    return (
+        f"<div class='exec-step'>"
+        f"<div class='exec-step-head'>"
+        f"<span class='exec-step-badge' style='background:{bg};color:{fg}'>{badge_label}</span>"
+        f"<span class='exec-step-time'>{time_label}</span>"
+        f"</div>"
+        f"<div class='exec-step-title'>{title}</div>"
+        f"<div class='exec-step-desc'>{desc}</div>"
         f"</div>"
     )
 
@@ -648,10 +675,14 @@ with tab_gate:
 
     box = section("테스트 실행 우선순위 플랜", key="exec-plan")
     with box:
-        st.markdown(
-            "- **플랜 1 — P0** (Day 1 오전): 전량 실행, 1건 실패 시 즉시 🔴 보류.\n"
-            "- **플랜 2 — P1** (Day 1 오후): 다국어·멀티펫·권한 위주, 상한 초과 시 게이트 발동."
+        flow_html = (
+            "<div class='exec-flow'>"
+            + exec_step("P0", PRIORITY_BADGE["P0"], "Day 1 오전", "전량 실행", "1건 실패 시 즉시 🔴 보류")
+            + "<div class='exec-arrow'>→</div>"
+            + exec_step("P1", PRIORITY_BADGE["P1"], "Day 1 오후", "다국어·멀티펫·권한 위주", "상한 초과 시 게이트 발동")
+            + "</div>"
         )
+        st.markdown(flow_html, unsafe_allow_html=True)
 
     box = section("우선순위 점수화 (100점)", key="scoring")
     with box:
@@ -659,6 +690,31 @@ with tab_gate:
             "2축 정성 판단(서비스 중단·영향 범위)에 **가역성** 축을 더한 3요소 가중합. "
             "총점 **≥80 = P0 / 50~79 = P1 / <50 = P2**."
         )
+        score_df = pd.DataFrame({
+            "축": ["배점"] * 3,
+            "요소": ["F1 서비스 중단 심각도", "F2 영향 사용자 범위", "F3 가역성/우회"],
+            "배점": [50, 30, 20],
+        })
+        SCORE_COLOR = {
+            "F1 서비스 중단 심각도": "#184f95",
+            "F2 영향 사용자 범위": "#2a78d6",
+            "F3 가역성/우회": "#6da7ec",
+        }
+        score_fig = px.bar(
+            score_df, x="배점", y="축", color="요소", orientation="h",
+            category_orders={"요소": list(SCORE_COLOR.keys())},
+            color_discrete_map=SCORE_COLOR, text="배점",
+        )
+        score_fig.update_traces(textposition="inside", textfont_color="white", textfont_size=13,
+                                 marker_line_width=0)
+        score_fig.update_layout(
+            height=100, margin=dict(l=8, r=8, t=8, b=8),
+            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+            font_family=FONT_STACK, barmode="stack",
+            legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="left", x=0, title=None),
+            xaxis=dict(visible=False), yaxis=dict(visible=False),
+        )
+        st.plotly_chart(score_fig, use_container_width=True, theme=None, config={"displayModeBar": False})
         with st.expander("채점 기준표 · 도메인 즉시승격 목록 보기"):
             score_tbl = pd.DataFrame({
                 "요소": ["F1 서비스 중단 심각도", "F2 영향 사용자 범위", "F3 가역성/우회"],
