@@ -580,7 +580,7 @@ with tab_gate:
         p1_threshold = st.slider(
             "P1 허용 상한",
             min_value=0, max_value=10, value=2, key="p1_threshold",
-            help="릴리즈마다 리스크 허용치가 다를 수 있어 PM이 직접 조정합니다. "
+            help="릴리즈마다 리스크 허용치가 다를 수 있어 직접 조정합니다. "
                  "예: 결제·계정처럼 민감한 출시는 낮게, 커뮤니티 UI 개선은 높게.",
         )
         verdict_slot = st.container()
