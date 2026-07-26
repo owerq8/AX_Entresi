@@ -686,36 +686,36 @@ with tab_gate:
 
     box = section("우선순위 점수화 (100점)", key="scoring")
     with box:
-        st.markdown(
-            "2축 정성 판단(서비스 중단·영향 범위)에 **가역성** 축을 더한 3요소 가중합. "
-            "총점 **≥80 = P0 / 50~79 = P1 / <50 = P2**."
-        )
-        score_df = pd.DataFrame({
-            "축": ["배점"] * 3,
-            "요소": ["F1 서비스 중단 심각도", "F2 영향 사용자 범위", "F3 가역성/우회"],
-            "배점": [50, 30, 20],
-        })
-        SCORE_COLOR = {
-            "F1 서비스 중단 심각도": "#184f95",
-            "F2 영향 사용자 범위": "#2a78d6",
-            "F3 가역성/우회": "#6da7ec",
-        }
-        score_fig = px.bar(
-            score_df, x="배점", y="축", color="요소", orientation="h",
-            category_orders={"요소": list(SCORE_COLOR.keys())},
-            color_discrete_map=SCORE_COLOR, text="배점",
-        )
-        score_fig.update_traces(textposition="inside", textfont_color="white", textfont_size=13,
-                                 marker_line_width=0)
-        score_fig.update_layout(
-            height=100, margin=dict(l=8, r=8, t=8, b=8),
-            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-            font_family=FONT_STACK, barmode="stack",
-            legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="left", x=0, title=None),
-            xaxis=dict(visible=False), yaxis=dict(visible=False),
-        )
-        st.plotly_chart(score_fig, use_container_width=True, theme=None, config={"displayModeBar": False})
-        with st.expander("채점 기준표 · 도메인 즉시승격 목록 보기"):
+        with st.expander("판단 기준 보기"):
+            st.markdown(
+                "2축 정성 판단(서비스 중단·영향 범위)에 **가역성** 축을 더한 3요소 가중합. "
+                "총점 **≥80 = P0 / 50~79 = P1 / <50 = P2**."
+            )
+            score_df = pd.DataFrame({
+                "축": ["배점"] * 3,
+                "요소": ["F1 서비스 중단 심각도", "F2 영향 사용자 범위", "F3 가역성/우회"],
+                "배점": [50, 30, 20],
+            })
+            SCORE_COLOR = {
+                "F1 서비스 중단 심각도": "#184f95",
+                "F2 영향 사용자 범위": "#2a78d6",
+                "F3 가역성/우회": "#6da7ec",
+            }
+            score_fig = px.bar(
+                score_df, x="배점", y="축", color="요소", orientation="h",
+                category_orders={"요소": list(SCORE_COLOR.keys())},
+                color_discrete_map=SCORE_COLOR, text="배점",
+            )
+            score_fig.update_traces(textposition="inside", textfont_color="white", textfont_size=13,
+                                     marker_line_width=0)
+            score_fig.update_layout(
+                height=100, margin=dict(l=8, r=8, t=8, b=8),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                font_family=FONT_STACK, barmode="stack",
+                legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="left", x=0, title=None),
+                xaxis=dict(visible=False), yaxis=dict(visible=False),
+            )
+            st.plotly_chart(score_fig, use_container_width=True, theme=None, config={"displayModeBar": False})
             score_tbl = pd.DataFrame({
                 "요소": ["F1 서비스 중단 심각도", "F2 영향 사용자 범위", "F3 가역성/우회"],
                 "배점": [50, 30, 20],
