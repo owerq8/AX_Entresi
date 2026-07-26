@@ -361,6 +361,7 @@ df["글로벌관련"] = df.apply(is_global_related, axis=1)
 # ────────────────────────────────────────────────────────────
 # 헤더 & KPI
 # ────────────────────────────────────────────────────────────
+st.image(str(ROOT / "assets" / "petbbi_logo.png"), width=90)
 st.title("Petbbi(펫삐) QA 체크리스트")
 st.caption(f"현재 데이터: **{source_label}**  ·  기획서 기반 QA 체크리스트 자동 생성 파이프라인 산출물입니다.")
 
