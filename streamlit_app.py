@@ -709,11 +709,12 @@ with tab_gate:
             score_fig.update_traces(textposition="inside", textfont_color="white", textfont_size=13,
                                      marker_line_width=0)
             score_fig.update_layout(
-                height=100, margin=dict(l=8, r=8, t=8, b=8),
+                height=100, margin=dict(l=0, r=0, t=8, b=0),
                 plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                 font_family=FONT_STACK, barmode="stack",
                 legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="left", x=0, title=None),
-                xaxis=dict(visible=False), yaxis=dict(visible=False),
+                xaxis=dict(visible=False, range=[0, score_df["배점"].sum()]),
+                yaxis=dict(visible=False),
             )
             st.plotly_chart(score_fig, use_container_width=True, theme=None, config={"displayModeBar": False})
             score_tbl = pd.DataFrame({
