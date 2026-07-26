@@ -687,7 +687,7 @@ with tab_gate:
     box = section("우선순위 점수화 (100점)", key="scoring")
     with box:
         with st.expander("판단 기준 보기"):
-            st.markdown(
+            st.caption(
                 "F1(서비스 중단 심각도)·F2(영향 사용자 범위)·F3(가역성/우회) 점수를 더해 우선순위를 정합니다. "
                 "총점 **80점 이상 P0, 50~79점 P1, 50점 미만 P2**."
             )
