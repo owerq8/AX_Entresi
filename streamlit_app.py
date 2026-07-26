@@ -25,7 +25,8 @@ import streamlit as st
 # ────────────────────────────────────────────────────────────
 # 기본 설정 & 브랜딩
 # ────────────────────────────────────────────────────────────
-BRAND = "#e63946"  # Petbbi coral (output/basic/qa-checklist-petbbi.html 시안과 통일)
+BRAND = "#b5563f"  # Petbbi 브랜드 톤 — entresi.com의 차분한 다크·미니멀 무드에 맞춘 채도 낮춘 테라코타
+# (.streamlit/config.toml의 theme.primaryColor와 동일 값 유지)
 ROOT = Path(__file__).parent
 FONT_STACK = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif"
 
@@ -91,7 +92,7 @@ st.markdown(
       .stat-n {{ font-size: 40px; font-weight: 800; line-height: 1.1; }}
       .stat-label {{ font-size: 13px; color: #666; margin-top: 2px; }}
       .stat-pct {{ font-size: 13px; font-weight: 600; margin-top: 6px; min-height: 1em; }}
-      .stat-c-red {{ color: #e63946; }}
+      .stat-c-red {{ color: {SEMANTIC['critical']}; }}
       .stat-c-purple {{ color: #6c5ce7; }}
       .stat-c-blue {{ color: #4361ee; }}
       .stat-c-gray {{ color: #6c757d; }}
