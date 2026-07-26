@@ -319,7 +319,8 @@ def generate_checklist_from_spec(md_bytes: bytes, filename: str) -> pd.DataFrame
 # ────────────────────────────────────────────────────────────
 # 사이드바 — 데이터 선택 / 업로드
 # ────────────────────────────────────────────────────────────
-st.sidebar.title("🐾 Petbbi QA")
+st.sidebar.image(str(ROOT / "assets" / "petbbi_icon.png"), width=48)
+st.sidebar.title("Petbbi QA")
 
 choice = st.sidebar.radio("기획서 선택", list(SPECS.keys()), index=0)
 
