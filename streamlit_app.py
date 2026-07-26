@@ -124,7 +124,7 @@ st.markdown(
       .empty-state .icon {{ font-size: 32px; margin-bottom: 8px; }}
 
       /* 테스트 실행 플랜 — 2단계 가로 타임라인 (섹션 카드 하단 padding이 2px뿐이라 여백 보강) */
-      .exec-flow {{ display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }}
+      .exec-flow {{ display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; margin-bottom: 25px; }}
       .exec-step {{
         flex: 1; min-width: 220px; background: #fff; border: 1px solid #eee;
         border-radius: 12px; padding: 16px 18px;
