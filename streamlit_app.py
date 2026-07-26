@@ -478,7 +478,7 @@ with tab_cov:
     # 기획서 원문(H2)을 기준으로 비교 — CSV만 보면 케이스 0건인 섹션은 표에 행 자체가 안 생겨 못 잡는다
     _missing_sections = [s for s in expected_sections if s not in set(df["기능섹션"])]
     st.info(
-        f"**릴리즈 준비도 한 줄**  ·  P0 {n_p0}건  ·  "
+        f"**커버리지 요약**  ·  P0 {n_p0}건  ·  "
         f"미커버 섹션 {len(_missing_sections)}개  ·  "
         f"엣지 {_edges_all['엣지세부유형'].nunique() if len(_edges_all) else 0}유형 {len(_edges_all)}건"
     )
