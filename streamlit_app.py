@@ -433,8 +433,8 @@ tab_list, tab_cov, tab_gate, tab_repro = st.tabs(
 # ────────────────────────────────────────────────────────────
 with tab_list:
     f1, f2, f3, f4 = st.columns(4)
-    sel_sec = f1.multiselect("기능섹션", sorted(df["기능섹션"].unique()))
-    sel_type = f2.multiselect("테스트유형", ["Happy Path", "Unhappy Path", "Edge Case"])
+    sel_sec = f1.multiselect("기능 섹션", sorted(df["기능섹션"].unique()))
+    sel_type = f2.multiselect("테스트 유형", ["Happy Path", "Unhappy Path", "Edge Case"])
     sel_pri = f3.multiselect("우선순위", ["P0", "P1", "P2"])
     sel_src = f4.multiselect("출처", ["기획서기반", "AI추가"])
     kw = st.text_input("🔎 제목·절차·기대결과 검색", placeholder="예: 네트워크, 재생성, 삭제 …")
@@ -473,7 +473,7 @@ with tab_list:
                     "테스트케이스제목": st.column_config.TextColumn(label="테스트 케이스 제목", width="medium"),
                     "테스트유형": st.column_config.Column(label="테스트 유형"),
                     "사전조건": st.column_config.Column(label="사전 조건"),
-                    "테스트절차": st.column_config.TextColumn(width="large"),
+                    "테스트절차": st.column_config.TextColumn(label="테스트 절차", width="large"),
                     "기대결과": st.column_config.TextColumn(width="large"),
                 },
             )
