@@ -1,5 +1,5 @@
 [theme]
-primaryColor = "#b5563f"
+primaryColor = "#c85f3d"
 backgroundColor = "#ffffff"
 secondaryBackgroundColor = "#fdf3ef"
 textColor = "#1d1d1f"
@@ -9,7 +9,7 @@ font = "sans serif"
 backgroundColor = "#1a1a1a"
 secondaryBackgroundColor = "#2b2b2b"
 textColor = "#f2f2f0"
-primaryColor = "#c97b5f"
+primaryColor = "#d38066"
 borderColor = "#3a3a3a"
 
 [server]

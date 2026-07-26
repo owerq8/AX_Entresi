@@ -25,7 +25,7 @@ import streamlit as st
 # ────────────────────────────────────────────────────────────
 # 기본 설정 & 브랜딩
 # ────────────────────────────────────────────────────────────
-BRAND = "#b5563f"  # Petbbi 브랜드 톤 — entresi.com의 차분한 다크·미니멀 무드에 맞춘 채도 낮춘 테라코타
+BRAND = "#c85f3d"  # Petbbi 브랜드 톤 — 로고 원색(#e95528)과 차분한 무드 사이 절충 톤
 # (.streamlit/config.toml의 theme.primaryColor와 동일 값 유지)
 ROOT = Path(__file__).parent
 FONT_STACK = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif"
@@ -333,6 +333,7 @@ choice = st.sidebar.radio("기획서 선택", list(SPECS.keys()), index=0)
 uploaded_spec = st.sidebar.file_uploader(
     "기획서(.md) 업로드 → QA 체크리스트 자동 생성",
     type=["md"],
+    label_visibility="collapsed",
     help="/spec-to-qa 파이프라인이 실행돼 표준 9컬럼 체크리스트를 생성합니다. "
          "Claude Code CLI가 설치된 로컬 환경에서만 동작하며 최대 5분 정도 걸릴 수 있습니다.",
     disabled=CLAUDE_BIN is None,
