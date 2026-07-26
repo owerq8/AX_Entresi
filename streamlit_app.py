@@ -8,7 +8,7 @@ Streamlit Community Cloud(공개 GitHub repo)에 그대로 배포된다.
 
 탭 구성
   📋 QA 체크리스트   : 필터/검색 가능한 케이스 테이블 + CSV 다운로드   (Basic)
-  📊 커버리지 리포트 : 섹션×유형 매트릭스 · 엣지 세부유형 분포 · 우선순위 (Basic/Standard)
+  📊 커버리지 리포트 : 섹션×유형 매트릭스 · 엣지 세부유형 분포 · 글로벌/다국어 분포 · 우선순위 (Basic/Standard)
   🚦 릴리즈 게이트   : 점수화 기준 + 게이트 3-tier 라이브 시뮬레이터      (Challenge)
   🔁 재현성          : v1~v4 기획서별 자동 생성 결과 비교               (Standard)
 """
@@ -158,6 +158,16 @@ def edge_subtype(row: pd.Series) -> str:
         if any(k in text for k in kws):
             return name
     return "경계값"
+
+
+GLOBAL_KEYWORDS = ["다국어", "언어", "영어", "일본어", "한국어", "해외", "글로벌", "국가", "타임존", "번역"]
+
+
+def is_global_related(row: pd.Series) -> bool:
+    """다국어·해외 동시 출시(Petbbi 핵심 비즈니스 축) 관련 케이스인지 키워드로 태깅.
+    Happy/Unhappy/Edge를 가로지르는 별도 축이라 엣지세부유형과 별개로 태깅한다."""
+    text = f"{row['테스트케이스제목']} {row['테스트절차']} {row['사전조건']} {row['기대결과']}"
+    return any(k in text for k in GLOBAL_KEYWORDS)
 
 
 # ────────────────────────────────────────────────────────────
@@ -346,6 +356,7 @@ if df.empty:
     st.stop()
 
 df["엣지세부유형"] = df.apply(edge_subtype, axis=1)
+df["글로벌관련"] = df.apply(is_global_related, axis=1)
 
 # ────────────────────────────────────────────────────────────
 # 헤더 & KPI
@@ -506,6 +517,30 @@ with tab_cov:
             f"엣지 {edges['엣지세부유형'].nunique() if len(edges) else 0}유형 {len(edges)}건"
         )
 
+    box = section("글로벌/다국어 커버리지 — 해외 동시 출시 관점 공백 감시", key="i18n-dist",
+                   caption="Petbbi 핵심 미션(다국어 동시 출시) 관점에서 언어·해외 관련 케이스가 섹션별로 있는지 확인합니다. "
+                           "제목·절차·기대결과의 언어/해외 키워드로 태깅합니다.")
+    with box:
+        n_global = int(df["글로벌관련"].sum())
+        if n_global:
+            i18n_counts = (
+                df[df["글로벌관련"]]["기능섹션"].value_counts()
+                .reindex(sorted(df["기능섹션"].unique())).fillna(0).astype(int)
+                .rename_axis("기능섹션").reset_index(name="건수")
+            )
+            fig = plotly_bar(i18n_counts, x="건수", y="기능섹션", orientation="h",
+                              color_discrete_sequence=["#4361ee"])
+            st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
+            zero_secs = i18n_counts[i18n_counts["건수"] == 0]["기능섹션"].tolist()
+            if zero_secs:
+                st.warning(f"다국어/글로벌 케이스 없는 섹션: {', '.join(zero_secs)} — 해외 동시 출시 전 보완 검토 필요")
+        else:
+            st.warning(
+                "다국어/글로벌 관련 케이스가 하나도 없습니다 — 해외 동시 출시가 핵심 미션인데 "
+                "이 기획서엔 언어·해외 관점 케이스가 없습니다."
+            )
+        st.caption(f"다국어/글로벌 관련 케이스 {n_global}건 / 전체 {n_total}건 ({n_global / n_total:.0%})")
+
 # ────────────────────────────────────────────────────────────
 # 🚦 릴리즈 게이트 (Challenge) — 라이브 시뮬레이터
 # ────────────────────────────────────────────────────────────
@@ -514,6 +549,12 @@ with tab_gate:
                    caption="출시 직전 **미해결(테스트 실패)** 케이스 수로 go/no-go를 기계 판정합니다. "
                            "아래에서 P0·P1 케이스의 통과 여부를 토글하면 게이트가 실시간으로 갱신됩니다.")
     with box:
+        p1_threshold = st.slider(
+            "P1 허용 상한 — 미해결 P1이 이 건수를 초과하면 스프린트 연장 권장으로 전환",
+            min_value=0, max_value=10, value=2, key="p1_threshold",
+            help="릴리즈마다 리스크 허용치가 다를 수 있어 PM이 직접 조정합니다. "
+                 "예: 결제·계정처럼 민감한 출시는 낮게, 커뮤니티 UI 개선은 높게.",
+        )
         kpi_slot = st.container()
         verdict_slot = st.container()
 
@@ -536,15 +577,15 @@ with tab_gate:
                 "🔴", "출시 보류 (Block)", "#e63946",
                 f"미해결 P0 {unresolved_p0}건 — 1건이라도 있으면 출시 불가. 핫픽스 후 재검증 필요.",
             )
-        elif unresolved_p1 > 2:
+        elif unresolved_p1 > p1_threshold:
             flag, status, border_color, note = (
                 "🟠", "스프린트 연장 권장", "#e76f51",
-                f"P0=0 이지만 미해결 P1 {unresolved_p1}건 > 상한 2 → 스프린트 연장 권장.",
+                f"P0=0 이지만 미해결 P1 {unresolved_p1}건 > 상한 {p1_threshold} → 스프린트 연장 권장.",
             )
         elif unresolved_p1 > 0:
             flag, status, border_color, note = (
                 "🟡", "조건부 출시 (Warn)", "#f4a261",
-                f"P0=0, 미해결 P1 {unresolved_p1}건(≤2) — PM 승인 하 출시 + 차기 스프린트 핫픽스 등록.",
+                f"P0=0, 미해결 P1 {unresolved_p1}건(≤{p1_threshold}) — PM 승인 하 출시 + 차기 스프린트 핫픽스 등록.",
             )
         else:
             flag, status, border_color, note = (
@@ -556,7 +597,7 @@ with tab_gate:
             g1, g2, g3 = st.columns(3)
             g1.markdown(stat_tile("미해결 P0", f"{unresolved_p0}건", "", "stat-c-red"), unsafe_allow_html=True)
             g2.markdown(stat_tile("미해결 P1", f"{unresolved_p1}건", "", "stat-c-blue"), unsafe_allow_html=True)
-            g3.markdown(stat_tile("게이트 상한(P1)", "≤ 2건", "", "stat-c-gray"), unsafe_allow_html=True)
+            g3.markdown(stat_tile("게이트 상한(P1)", f"≤ {p1_threshold}건", "", "stat-c-gray"), unsafe_allow_html=True)
         with verdict_slot:
             st.markdown(
                 verdict_card(flag, status, note, border_color, n_p0, n_p1, n_p2),
