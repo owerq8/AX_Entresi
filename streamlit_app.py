@@ -451,7 +451,7 @@ with tab_list:
 # 📊 커버리지 리포트
 # ────────────────────────────────────────────────────────────
 with tab_cov:
-    box = section("섹션 × 테스트유형 매트릭스", key="matrix",
+    box = section("기능 섹션 x 테스트 유형 매트릭스", key="matrix",
                    caption="출시 직전 PM의 두 질문 — ① Happy/Unhappy 중 누락된 유형이 있는지 ② 그 섹션에 블로커(P0)가 포함되어 있는지 확인합니다.")
     with box:
         matrix = (
@@ -474,6 +474,7 @@ with tab_cov:
                 warn.append("⚠️Unhappy 없음")
             return " ".join(warn) if warn else "✅"
         matrix["점검"] = matrix.apply(flag_row, axis=1)
+        matrix.index.name = "기능 섹션"
 
         st.dataframe(style_matrix(matrix), use_container_width=True)
 
