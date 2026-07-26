@@ -279,14 +279,14 @@ def plotly_bar(df: pd.DataFrame, x: str, y: str, *, color: str | None = None,
 
 
 def verdict_card(flag: str, status: str, desc: str, border_color: str,
-                  p0: int, p1: int, p2: int) -> str:
+                  unresolved_p0: int, unresolved_p1: int) -> str:
+    """칩은 토글 시뮬레이션과 무관한 전체 통계가 아니라, 실시간 미해결 건수를 그대로 반영한다."""
     chips = "".join(
         f"<div class='vn' style='background:{bg};color:{fg}'>"
         f"<div class='vn-n'>{n}</div><div class='vn-l'>{label}</div></div>"
         for label, n, (bg, fg) in (
-            ("P0", p0, PRIORITY_BADGE["P0"]),
-            ("P1", p1, PRIORITY_BADGE["P1"]),
-            ("P2", p2, PRIORITY_BADGE["P2"]),
+            ("미해결 P0", unresolved_p0, PRIORITY_BADGE["P0"]),
+            ("미해결 P1", unresolved_p1, PRIORITY_BADGE["P1"]),
         )
     )
     return (
@@ -629,7 +629,7 @@ with tab_gate:
             g3.markdown(stat_tile("게이트 상한(P1)", f"≤ {p1_threshold}건", "", "stat-c-gray"), unsafe_allow_html=True)
         with verdict_slot:
             st.markdown(
-                verdict_card(flag, status, note, border_color, n_p0, n_p1, n_p2),
+                verdict_card(flag, status, note, border_color, unresolved_p0, unresolved_p1),
                 unsafe_allow_html=True,
             )
 
