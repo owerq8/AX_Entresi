@@ -599,7 +599,7 @@ with tab_cov:
             if missing_kinds:
                 st.warning(f"엣지 유형 공백: {', '.join(sorted(missing_kinds))} — 해당 실패 클래스 미커버")
             else:
-                st.success("엣지 6유형 모두 커버됨 (6/6)")
+                st.success("엣지 6유형 모두 커버됩니다 (6/6)")
         else:
             st.info("Edge Case가 없습니다.")
 
@@ -738,8 +738,8 @@ with tab_gate:
 # ────────────────────────────────────────────────────────────
 with tab_repro:
     box = section("재현성 검증 — 성격이 다른 기획서 4건에 동일 파이프라인 적용", key="repro",
-                   caption="건수·P0 비율이 매번 다른 것은 기획서마다 리스크 구조가 다르기 때문. "
-                           "규칙(2축 점수·6개 승격·엣지 규칙엔진)은 4건 모두 동일하게 적용됨.")
+                   caption="건수·P0 비율이 매번 다른 것은 기획서마다 리스크 구조가 다르기 때문입니다. "
+                           "규칙(3요소 점수·6개 즉시승격·엣지 규칙엔진)은 4건 모두 동일하게 적용됩니다.")
     with box:
         rows = []
         for label, path in SPECS.items():
@@ -775,7 +775,7 @@ with tab_repro:
                                   color_discrete_sequence=[BRAND])
                 st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
             with c2:
-                st.caption("기획서별 P0(블로커) 수 — 도메인마다 리스크 구조가 다름")
+                st.caption("기획서별 P0(블로커) 수 — 도메인마다 리스크 구조가 다릅니다")
                 fig = plotly_bar(repro, x="기획서", y="P0",
                                   category_orders={"기획서": list(SPECS.keys())},
                                   color_discrete_sequence=["#6c5ce7"])
