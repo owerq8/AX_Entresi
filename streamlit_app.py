@@ -74,6 +74,11 @@ st.markdown(
       div[data-testid="stMetricValue"] {{ color: {BRAND}; font-weight: 700; }}
       .stTabs [data-baseweb="tab-list"] {{ gap: 4px; }}
 
+      /* 브랜드 로고+타이틀 — 아이콘과 글자 사이 기본 stVerticalBlock 간격(16px)을 좁힘 */
+      div[class*="st-key-brand_header"], div[class*="st-key-brand_sidebar"] {{ gap: 2px !important; }}
+      div[class*="st-key-brand_header"] h1 {{ margin-top: 4px; }}
+      div[class*="st-key-brand_sidebar"] h1 {{ margin-top: 2px; }}
+
       /* 섹션 카드 — st.container(border=True, key="section_*")의 공개 CSS 훅 */
       div[class*="st-key-section_"] {{
         background: #fff; border-radius: 12px; border-color: transparent !important;
@@ -319,8 +324,9 @@ def generate_checklist_from_spec(md_bytes: bytes, filename: str) -> pd.DataFrame
 # ────────────────────────────────────────────────────────────
 # 사이드바 — 데이터 선택 / 업로드
 # ────────────────────────────────────────────────────────────
-st.sidebar.image(str(ROOT / "assets" / "petbbi_icon.png"), width=48)
-st.sidebar.title("Petbbi QA")
+with st.sidebar.container(key="brand_sidebar"):
+    st.image(str(ROOT / "assets" / "petbbi_icon.png"), width=48)
+    st.title("Petbbi QA")
 
 choice = st.sidebar.radio("기획서 선택", list(SPECS.keys()), index=0)
 
@@ -362,8 +368,9 @@ df["글로벌관련"] = df.apply(is_global_related, axis=1)
 # ────────────────────────────────────────────────────────────
 # 헤더 & KPI
 # ────────────────────────────────────────────────────────────
-st.image(str(ROOT / "assets" / "petbbi_logo.png"), width=90)
-st.title("Petbbi(펫삐) QA 체크리스트")
+with st.container(key="brand_header"):
+    st.image(str(ROOT / "assets" / "petbbi_logo.png"), width=90)
+    st.title("Petbbi(펫삐) QA 체크리스트")
 st.caption(f"현재 데이터: **{source_label}**  ·  기획서 기반 QA 체크리스트 자동 생성 파이프라인 산출물입니다.")
 
 n_total = len(df)
