@@ -598,8 +598,10 @@ with tab_gate:
 
         blockers = df[df["우선순위"].isin(["P0", "P1"])].copy()
         blockers["미해결(실패)"] = blockers["우선순위"] == "P0"  # 기본: P0는 미해결로 가정
+        blockers_view = blockers[["테스트케이스ID", "기능섹션", "테스트케이스제목", "우선순위", "미해결(실패)"]]
+        # 우선순위는 disabled(비편집) 컬럼이라 Styler 배지가 그대로 적용됨 — QA 체크리스트 표와 톤 통일
         edit = st.data_editor(
-            blockers[["테스트케이스ID", "기능섹션", "테스트케이스제목", "우선순위", "미해결(실패)"]],
+            blockers_view.style.map(lambda v: _badge_css(v, PRIORITY_BADGE), subset=["우선순위"]),
             use_container_width=True,
             hide_index=True,
             disabled=["테스트케이스ID", "기능섹션", "테스트케이스제목", "우선순위"],
