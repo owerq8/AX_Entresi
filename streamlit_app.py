@@ -717,4 +717,4 @@ with tab_repro:
                 st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
 
 st.divider()
-st.caption("🐾 Petbbi QA Pipeline · 엔트레씨 QA/PM · /spec-to-qa 산출물 시각화 · Streamlit")
+st.caption("Petbbi QA Pipeline · 엔트레씨 QA·PM /spec-to-qa 산출물 시각화 · Streamlit")
