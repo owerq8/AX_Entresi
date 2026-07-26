@@ -122,6 +122,17 @@ st.markdown(
       /* 빈 상태 */
       .empty-state {{ text-align: center; padding: 48px 24px; color: #6c757d; }}
       .empty-state .icon {{ font-size: 32px; margin-bottom: 8px; }}
+
+      /* 툴팁 — 기본 흰 배경/검정 글자 대신 사이드바와 통일된 다크 톤 + 브랜드 포인트 */
+      div[data-baseweb="tooltip"] {{
+        background-color: #2b2b2b !important;
+        border-radius: 8px !important;
+        border-top: 2px solid {BRAND} !important;
+      }}
+      div[data-baseweb="tooltip"] [data-testid="stTooltipContent"],
+      div[data-baseweb="tooltip"] [data-testid="stTooltipContent"] * {{
+        color: #f2f2f0 !important;
+      }}
     </style>
     """,
     unsafe_allow_html=True,
