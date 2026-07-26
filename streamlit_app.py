@@ -562,24 +562,12 @@ with tab_cov:
         else:
             st.info("Edge Case가 없습니다.")
 
-    box = section("글로벌/다국어 커버리지 — 해외 동시 출시 관점 공백 감시", key="i18n-dist",
-                   caption="Petbbi 핵심 미션(다국어 동시 출시) 관점에서 언어·해외 관련 케이스가 섹션별로 있는지 확인합니다. "
+    box = section("글로벌/다국어 커버리지", key="i18n-dist",
+                   caption="Petbbi 핵심 미션(다국어 동시 출시) 관점에서 언어·해외 관련 케이스가 얼마나 있는지 확인합니다. "
                            "제목·절차·기대결과의 언어/해외 키워드로 태깅합니다.")
     with box:
         n_global = int(df["글로벌관련"].sum())
-        if n_global:
-            i18n_counts = (
-                df[df["글로벌관련"]]["기능섹션"].value_counts()
-                .reindex(sorted(df["기능섹션"].unique())).fillna(0).astype(int)
-                .rename_axis("기능섹션").reset_index(name="건수")
-            )
-            fig = plotly_bar(i18n_counts, x="건수", y="기능섹션", orientation="h",
-                              color_discrete_sequence=["#4361ee"])
-            st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
-            zero_secs = i18n_counts[i18n_counts["건수"] == 0]["기능섹션"].tolist()
-            if zero_secs:
-                st.warning(f"다국어/글로벌 케이스 없는 섹션: {', '.join(zero_secs)} — 해외 동시 출시 전 보완 검토 필요")
-        else:
+        if not n_global:
             st.warning(
                 "다국어/글로벌 관련 케이스가 하나도 없습니다 — 해외 동시 출시가 핵심 미션인데 "
                 "이 기획서엔 언어·해외 관점 케이스가 없습니다."
