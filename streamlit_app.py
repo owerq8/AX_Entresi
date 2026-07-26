@@ -319,7 +319,6 @@ def generate_checklist_from_spec(md_bytes: bytes, filename: str) -> pd.DataFrame
 # 사이드바 — 데이터 선택 / 업로드
 # ────────────────────────────────────────────────────────────
 st.sidebar.title("🐾 Petbbi QA")
-st.sidebar.caption("기획서 기반 QA 체크리스트 자동 생성 파이프라인 산출물입니다.")
 
 choice = st.sidebar.radio("기획서 선택", list(SPECS.keys()), index=0)
 
@@ -362,7 +361,7 @@ df["글로벌관련"] = df.apply(is_global_related, axis=1)
 # 헤더 & KPI
 # ────────────────────────────────────────────────────────────
 st.title("Petbbi(펫삐) QA 체크리스트")
-st.caption(f"현재 데이터: **{source_label}**  ·  기획서(.md) → 구조분석 → 케이스설계 → 우선순위 → 엣지보완 → CSV")
+st.caption("기획서 기반 QA 체크리스트 자동 생성 파이프라인 산출물입니다.")
 
 n_total = len(df)
 n_p0 = int((df["우선순위"] == "P0").sum())
