@@ -774,7 +774,7 @@ with tab_repro:
                                   color_discrete_sequence=[BRAND])
                 st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
             with c2:
-                st.caption("기획서별 P0(블로커) 수 — 도메인마다 리스크 구조가 다릅니다")
+                st.caption("기획서별 P0(블로커) 수")
                 fig = plotly_bar(repro, x="기획서", y="P0",
                                   category_orders={"기획서": list(SPECS.keys())},
                                   color_discrete_sequence=["#6c5ce7"])
