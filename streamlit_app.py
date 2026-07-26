@@ -563,8 +563,7 @@ with tab_cov:
             st.info("Edge Case가 없습니다.")
 
     box = section("글로벌/다국어 커버리지", key="i18n-dist",
-                   caption="Petbbi 핵심 미션(다국어 동시 출시) 관점에서 언어·해외 관련 케이스가 얼마나 있는지 확인합니다. "
-                           "제목·절차·기대결과의 언어/해외 키워드로 태깅합니다.")
+                   caption="Petbbi 핵심 미션(다국어 동시 출시) 관점에서 언어·해외 관련 케이스가 얼마나 있는지 확인합니다.")
     with box:
         n_global = int(df["글로벌관련"].sum())
         if not n_global:
