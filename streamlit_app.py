@@ -501,7 +501,7 @@ with tab_cov:
             by_src_long = by_src.reset_index().melt(id_vars="테스트유형", var_name="출처", value_name="건수")
             fig = plotly_bar(by_src_long, x="테스트유형", y="건수", color="출처",
                               category_orders={"테스트유형": TYPE_ORDER, "출처": SOURCE_ORDER},
-                              color_discrete_map=CHART_COLOR)
+                              color_discrete_map=CHART_COLOR, barmode="stack")
             st.plotly_chart(fig, use_container_width=True, theme=None, config={"displayModeBar": False})
 
     box = section("엣지 세부유형 분포 — 실패 클래스 공백 감시", key="edge-dist")
