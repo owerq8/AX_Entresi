@@ -551,7 +551,7 @@ with tab_cov:
         matrix["점검"] = matrix.apply(flag_row, axis=1)
         matrix.index.name = "기능 섹션"
 
-        st.dataframe(style_matrix(matrix), use_container_width=True)
+        st.table(style_matrix(matrix))
 
     box = section("분포 차트", key="distributions")
     with box:
