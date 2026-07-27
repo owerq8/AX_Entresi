@@ -156,8 +156,7 @@ streamlit run streamlit_app.py     # http://localhost:8501
 ├── output/
 │   ├── basic/                     # v1 QA 체크리스트 (53건·9컬럼 CSV)
 │   ├── standard/                  # 재현 CSV v2~v4 + 커버리지 리포트 + 양식 설계
-│   ├── challenge/                 # 릴리즈 판단 v1~v4 + 점수식 전수검증
-│   └── template.md                # 전 레벨 통합 제출 리포트
+│   └── challenge/                 # 릴리즈 판단 v1~v4 + 점수식 전수검증
 ├── decisions.md                   # 의사결정 로그 (20+ 결정 기록)
 ├── DEPLOY.md                      # Streamlit 배포 가이드
 └── output/hackathon_summary.md    # 작업 전체 요약
