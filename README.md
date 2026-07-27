@@ -5,6 +5,8 @@
 
 기획서(`.md`) 하나를 넣으면 **구조분석 → 케이스설계 → 우선순위 점수화 → 엣지케이스 자동보완 → 릴리즈 게이트 판정**까지 한 번의 실행으로 나오는, **재현 가능한 QA 파이프라인**입니다.
 
+> 이 저장소는 포트폴리오 공개용입니다. 과제 원문·기업 제공 컨텍스트·발표용 개인 자료는 비공개 처리했고, 직접 설계한 파이프라인 로직·코드·산출물만 포함합니다.
+
 체크리스트 1장을 손으로 만든 것이 아니라, **"어떤 기획서를 넣어도 동일 품질로 재현되는 시스템"** 을 설계하고 성격이 다른 기획서 4종(AI·결제·CRUD·예약)으로 실증했습니다.
 
 ---
@@ -156,7 +158,6 @@ streamlit run streamlit_app.py     # http://localhost:8501
 │   ├── standard/                  # 재현 CSV v2~v4 + 커버리지 리포트 + 양식 설계
 │   ├── challenge/                 # 릴리즈 판단 v1~v4 + 점수식 전수검증
 │   └── template.md                # 전 레벨 통합 제출 리포트
-├── context/                       # 기업 컨텍스트 (회사·업계)
 ├── decisions.md                   # 의사결정 로그 (20+ 결정 기록)
 ├── DEPLOY.md                      # Streamlit 배포 가이드
 └── output/hackathon_summary.md    # 작업 전체 요약
@@ -185,7 +186,6 @@ streamlit run streamlit_app.py     # http://localhost:8501
 
 ## 참고 문서
 
-- [CLAUDE.md](CLAUDE.md) — 과제 정의 · 채점 기준
 - [output/hackathon_summary.md](output/hackathon_summary.md) — 작업 전체 요약 · 발표 스토리라인
 - [decisions.md](decisions.md) — 의사결정 로그
 - [DEPLOY.md](DEPLOY.md) — 대시보드 배포 가이드
