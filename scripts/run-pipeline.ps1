@@ -3,10 +3,10 @@
 # 새 기획서(.md)를 넣으면 구조분석 → 케이스설계 → 우선순위분류 → 엣지보완 → CSV 생성까지
 # /spec-to-qa 스킬을 headless(claude -p)로 호출해 한 번에 자동 수행한다.
 #
-# 사용법:
-#   ./run-pipeline.ps1 data/product_spec_petbbi_v1.md      # 특정 기획서 1건
-#   ./run-pipeline.ps1                                      # data/*.md 전체 일괄
-#   ./run-pipeline.ps1 -SpecPath data/xxx.md -PermissionMode acceptEdits
+# 사용법 (프로젝트 루트에서 실행):
+#   ./scripts/run-pipeline.ps1 data/product_spec_petbbi_v1.md      # 특정 기획서 1건
+#   ./scripts/run-pipeline.ps1                                      # data/*.md 전체 일괄
+#   ./scripts/run-pipeline.ps1 -SpecPath data/xxx.md -PermissionMode acceptEdits
 #
 # 산출물: output/qa-checklist-<기획서파일명>.csv  (+ 커버리지 리포트/릴리즈 게이트는 대화 로그로 출력)
 
@@ -20,7 +20,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+$root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $root
 
 # claude CLI 존재 확인

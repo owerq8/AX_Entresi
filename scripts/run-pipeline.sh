@@ -4,16 +4,16 @@
 # 새 기획서(.md)를 넣으면 구조분석 → 케이스설계 → 우선순위분류 → 엣지보완 → CSV 생성까지
 # /spec-to-qa 스킬을 headless(claude -p)로 호출해 한 번에 자동 수행한다.
 #
-# 사용법:
-#   ./run-pipeline.sh data/product_spec_petbbi_v1.md      # 특정 기획서 1건
-#   ./run-pipeline.sh                                     # data/*.md 전체 일괄
-#   PERMISSION_MODE=bypassPermissions ./run-pipeline.sh data/xxx.md
+# 사용법 (프로젝트 루트에서 실행):
+#   ./scripts/run-pipeline.sh data/product_spec_petbbi_v1.md      # 특정 기획서 1건
+#   ./scripts/run-pipeline.sh                                     # data/*.md 전체 일괄
+#   PERMISSION_MODE=bypassPermissions ./scripts/run-pipeline.sh data/xxx.md
 #
 # 산출물: output/qa-checklist-<기획서파일명>.csv
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 # 파일 쓰기(CSV 저장) 자동 승인: acceptEdits(기본) / bypassPermissions(완전 무인)

@@ -59,13 +59,13 @@ Claude Code 대화 안에서:
 
 ```powershell
 # Windows / PowerShell
-./run-pipeline.ps1 data/product_spec_petbbi_v1.md   # 특정 기획서 1건
-./run-pipeline.ps1                                   # data/*.md 전체 일괄
+./scripts/run-pipeline.ps1 data/product_spec_petbbi_v1.md   # 특정 기획서 1건
+./scripts/run-pipeline.ps1                                   # data/*.md 전체 일괄
 ```
 
 ```bash
 # macOS / Linux
-./run-pipeline.sh data/product_spec_petbbi_v1.md
+./scripts/run-pipeline.sh data/product_spec_petbbi_v1.md
 ```
 
 → `output/qa-checklist-<기획서명>.csv` 생성 (+ 커버리지 리포트·릴리즈 게이트는 대화 로그로 출력)
@@ -77,7 +77,7 @@ pip install -r requirements.txt
 streamlit run streamlit_app.py     # http://localhost:8501
 ```
 
-배포 방법은 [DEPLOY.md](DEPLOY.md) 참고 (Streamlit Cloud, API 키 불필요).
+배포 방법은 [docs/DEPLOY.md](docs/DEPLOY.md) 참고 (Streamlit Cloud, API 키 불필요).
 
 ---
 
@@ -150,16 +150,17 @@ streamlit run streamlit_app.py     # http://localhost:8501
 ```
 .
 ├── .claude/skills/spec-to-qa.md   # 파이프라인 두뇌 (STEP 1~5 규칙)
-├── run-pipeline.ps1 / .sh         # 새 기획서 무인 실행 래퍼
+├── scripts/run-pipeline.ps1 / .sh # 새 기획서 무인 실행 래퍼
 ├── streamlit_app.py               # 웹 대시보드 (4탭)
 ├── data/                          # 입력 기획서 v1~v4 (.md)
 ├── output/
 │   ├── basic/                     # v1 QA 체크리스트 (53건·9컬럼 CSV)
 │   ├── standard/                  # 재현 CSV v2~v4 + 커버리지 리포트 + 양식 설계
-│   └── challenge/                 # 릴리즈 판단 v1~v4 + 점수식 전수검증
-├── decisions.md                   # 의사결정 로그 (20+ 결정 기록)
-├── DEPLOY.md                      # Streamlit 배포 가이드
-└── output/hackathon_summary.md    # 작업 전체 요약
+│   ├── challenge/                 # 릴리즈 판단 v1~v4 + 점수식 전수검증
+│   └── hackathon_summary.md       # 작업 전체 요약
+└── docs/
+    ├── decisions.md               # 의사결정 로그 (20+ 결정 기록)
+    └── DEPLOY.md                  # Streamlit 배포 가이드
 ```
 
 ## 웹 대시보드 (4탭)
@@ -186,5 +187,5 @@ streamlit run streamlit_app.py     # http://localhost:8501
 ## 참고 문서
 
 - [output/hackathon_summary.md](output/hackathon_summary.md) — 작업 전체 요약 · 발표 스토리라인
-- [decisions.md](decisions.md) — 의사결정 로그
-- [DEPLOY.md](DEPLOY.md) — 대시보드 배포 가이드
+- [docs/decisions.md](docs/decisions.md) — 의사결정 로그
+- [docs/DEPLOY.md](docs/DEPLOY.md) — 대시보드 배포 가이드
